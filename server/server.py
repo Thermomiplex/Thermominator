@@ -23,7 +23,7 @@ def app(environ, start_response):
   if path == "/":
 
     start_response('200 OK', [('content-type', 'text/html')])
-    return ['<center> Welcome to Hot-Pi. </br> Call /pi#/set/<number> to set a temp </br> Call /pi#/get to get the temp</center>']
+    return ['<center> Welcome to Hot-Pi. </br> Call /set/pi#/...temperature... to set a temp </br> Call /get/pi#/ to get the temp</center>']
 
   elif PathList[1] == "set":
 
@@ -54,5 +54,5 @@ def app(environ, start_response):
 
 
 if __name__ == '__main__':
-  httpserver.serve(app, host='127.0.0.1', port='11884')
+  httpserver.serve(app, host='152.78.162.95', port='11884')
 
