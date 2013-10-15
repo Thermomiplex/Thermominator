@@ -36,8 +36,8 @@ class Home:
 					 (self.heat_capacity * self.air_mass) for (t, temp) in enumerate(self.internal_temp)] 
 
 	def TotalHeatInput(self, time):
-		control = -1 * int(self.heater[time]) * self.heater_power
-		control -= self.leakage_rate * (self.internal_temp[time] - self.external_temp[time])
+		control = -1 * int(self.heater[time - 1]) * self.heater_power
+		control -= self.leakage_rate * (self.internal_temp[time - 1] - self.external_temp[time - 1])
 		return control
 
 	def ComsuptionAtSlot(self, time):
