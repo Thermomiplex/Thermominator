@@ -26,19 +26,32 @@ class Home:
 		self.id = home_id
 
 	def ResetHeater(self):
+		self.heater = [False] * self.time_slots
 
 	def AirMass(self, width, length, height):
 		return width * length * height * 1.249
 
 	def UpdateInternalTemperature(self):
 		internal_temp = [temp + self.time_slots * t /
-					 (self.heat_capacity * self.air_mass) for (temp, t) in enumerate(self.internal_temp)] 
+					 (self.heat_capacity * self.air_mass) for (t, temp) in enumerate(self.internal_temp)] 
 
 	def TotalHeatInput(self, time):
 		control = -1 * int(self.heater[time]) * self.heater_power
 		control -= self.leakage_rate * (self.internal_temp[time] - self.external_temp[time])
 		return control
 
-	def ResetHeater(self):
-		self.heater = [False] * self.time_slots
+	def ComsuptionAtSlot(self, time):
+		return int(self.heater[time]) * ( self.heater_power)
+
+	def Satisfied(self):
+		return AvgTempDeviation() <= self.tolerance && MaxTempDeviation() <= self.tolerance
+
+	def AvgTempDeviation(self):
+		diff = [abs(internal - setpoint) for internal,  in zip(self.internal_temp, self.set_points)]
+		return mean(diff)
+
+	def MaxTempDeviation(self):
+		diff = [abs(internal - setpoint) for internal,  in zip(self.internal_temp, self.set_points)]
+		return max(diff)
+
 
