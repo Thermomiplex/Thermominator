@@ -106,6 +106,13 @@ def app(environ, start_response):
 		pis = pi_names()
 		return template.render(pis=pis, message=message)
 
+	elif PathList[1] == "history":
+		pinum = PathList[2]
+		start_response('200 OK', [('content-type', 'text/html')])
+		template = env.get_template('test.html')
+		history = get_temp_log(pinum, "temperature_history")
+		return template.render(history=history)
+
 	elif PathList[1] == "set":
 
 		pinum = PathList[2]
