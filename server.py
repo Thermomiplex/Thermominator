@@ -142,7 +142,6 @@ def app(environ, start_response):
 
 
 	elif PathList[1] == "get":
-
 		start_response('200 OK', [('content-type', 'text/xml')])
 		pinum = PathList[2]
 		if pinum in pydict:
@@ -151,7 +150,6 @@ def app(environ, start_response):
 			return ['<pi>'+'<pinumber>'+str(pinum)+'</pinumber><temp>NO TEMP</temp></pi>']
 
 	elif PathList[1] == "get_plan":
-
 		start_response('200 OK', [('content-type', 'text/xml')])
 		pinum = PathList[2]
 		if pinum in pydict:
@@ -167,6 +165,7 @@ def app(environ, start_response):
 
 static_app = StaticURLParser("static/")
 full_app = Cascade([static_app, app])
+
 if __name__ == '__main__':
 	r = redis.StrictRedis()
 	env = Environment(loader=PackageLoader('templates', 'files'))
