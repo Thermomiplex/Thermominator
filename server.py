@@ -86,14 +86,12 @@ def get_temp_log(pi, name):
 	float_keys = {float(key): time_temp[key] for key in time_temp.keys()}
 	sorted_dict = OrderedDict()
 	for key in sorted_keys:
-		sorted_dict[key] = float_keys[str(key)]
+		sorted_dict[key] = float_keys[key]
 	return sorted_dict
 
 def get_temp_recent(pi, name):
 	key_recent = ":".join([pi, name]) + "_latest"
 	return r.get(key_recent)
-
-
 
 #### SERVER
 pydict = {} #Thermostat Request
