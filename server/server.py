@@ -63,6 +63,9 @@ def getWeatherUndergroundForecastArray(latitude_deg=50.8970,longitude_deg=-1.404
 ####
 
 
+def pi_names():
+	pis = list(set(r.keys("*:set_point")) | set(r.keys("*:ambient_set_point")))
+	return [pi.split[":"][0] for pi in pis]
 
 #### SERVER
 pydict = {} #Thermostat Request
@@ -76,10 +79,10 @@ def app(environ, start_response):
 	if path == "/":
 
 		start_response('200 OK', [('content-type', 'text/html')])
-		pis = list(set(r.keys("*:set_point")) | set(r.keys("*:ambient_set_point")))
+		
 		message = "Welcome etc"
 		template = env.get_template('index.html')
-
+		pis = pi_names()
 		return template.render(pis=pis, message=message)
 
 	elif PathList[1] == "set":
