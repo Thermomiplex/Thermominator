@@ -22,6 +22,11 @@
 		];
 
 		$.plot("#placeholder", [ temphist, sethist]);
+
+		document.getElementById("submit").onclick = function() {
+			var temp = document.getElementById('settemp').value;
+			document.location.href = '/set/2/'+temp
+		}
 	});
 
 	</script>
