@@ -1,0 +1,356 @@
+<!doctype html>
+<!--[if lt IE 7 ]><html lang="en" class="no-js ie6"> <![endif]-->
+<!--[if IE 7 ]><html lang="en" class="no-js ie7"> <![endif]-->
+<!--[if IE 8 ]><html lang="en" class="no-js ie8"> <![endif]-->
+<!--[if IE 9 ]><html lang="en" class="no-js ie9"> <![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!--><html lang="en" class="no-js"> <!--<![endif]-->
+<head>
+<meta charset="utf-8">
+<meta name="author" content="ThemeFuse">
+<meta name="keywords" content="">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Metro Vibes | Index</title>
+
+<!-- main JS libs -->
+<script src="js/libs/modernizr.min.js"></script>
+<script src="js/libs/jquery-1.10.0.js"></script>
+<script src="js/libs/jquery-ui.min.js"></script>
+<script src="js/libs/bootstrap.min.js"></script>
+
+<!-- Style CSS -->
+<link href="css/bootstrap.css" media="screen" rel="stylesheet">
+<link href="style.css" media="screen" rel="stylesheet">
+
+<!-- scripts -->
+<script src="js/general.js"></script>
+
+<!-- custom input -->
+<script src="js/jquery.customInput.js"></script>
+<script type="text/javascript" src="js/custom.js"></script>
+<!-- Placeholders -->
+<script type="text/javascript" src="js/jquery.powerful-placeholder.min.js"></script>
+<!-- Progress Bars -->
+<script src="js/progressbar.js"></script>
+<!-- Calendar -->
+<link href="css/jquery-ui-1.8.20.custom.css" rel="stylesheet">
+<script src="js/jquery-ui.multidatespicker.js"></script>
+<!-- Graph Builder -->
+<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+<script type="text/javascript">
+    google.load("visualization", "1", {packages:["corechart"]});
+    google.setOnLoadCallback(drawChart);
+    function drawChart() {
+        var data = google.visualization.arrayToDataTable([
+            ['Media', 'GB'],
+            ['Audio', 1100],
+            ['Video', 460],
+            ['Photo', 340],
+            ['Other', 100]
+        ]);
+
+        var options = {
+            pieHole: 0.4,
+            legend: 'none',
+            pieSliceText: 'none',
+            width: 220,
+            height: 220,
+            slices: {0: {color: '#4daf7b'}, 1: {color: '#e6623d'}, 2: {color: '#ebc85e'}, 3: {color: '#f4ede7'}},
+            chartArea:{left:"10px", top:"10px", width:"92%", height:"92%"}
+        };
+
+        var chart = new google.visualization.PieChart(document.getElementById('donutchart'));
+        chart.draw(data, options);
+
+        var data2 = google.visualization.arrayToDataTable([
+            ['Month', 'Traffic'],
+            ['June',  1100],
+            ['July',  1580],
+            ['August',  1300],
+            ['September',  1430]
+        ]);
+
+        var options2 = {
+            width: 220,
+            height: 220,
+            legend: 'none',
+            colors: ['#4daf7b'],
+            chartArea:{left:0, top:0, width:"100%", height:"100%"},
+            hAxis:{textPosition:"none", gridlines:{color:"#fff"}, baselineColor:"#4daf7b"},
+            vAxis:{textPosition:"none", gridlines:{color:"#fff"}, baselineColor:"#4daf7b"}
+        };
+
+        var chart2 = new google.visualization.ColumnChart(document.getElementById('columnchart'));
+        chart2.draw(data2, options2);
+    }
+</script>
+<!-- range sliders -->
+<script src="js/jquery.slider.bundle.js"></script>
+<script src="js/jquery.slider.js"></script>
+<link rel="stylesheet" href="css/jslider.css">
+<!-- Video Player -->
+<link href="css/video-js.css" rel="stylesheet">
+<script src="js/video.js"></script>
+<!-- Audio Player -->
+<link href="css/jplayer.css" rel="stylesheet">
+<script src="js/jquery.jplayer.min.js"></script>
+<script src="js/jplayer.playlist.min.js"></script>
+<script type="text/javascript">
+    //<![CDATA[
+    $(document).ready(function(){
+
+        new jPlayerPlaylist({
+            jPlayer: "#jquery_jplayer_1",
+            cssSelectorAncestor: "#jp_container_1"
+        }, [
+            {
+                title:"<div class='item-song'>This is a demo video</div><div class='item-artist'>Daniela, Wenchao</div><img src='images/temp/music-player4.jpg' alt='' />",
+                mp3:"http://www.jplayer.org/audio/mp3/TSP-05-Your_face.mp3",
+                oga:"http://www.jplayer.org/audio/ogg/TSP-05-Your_face.ogg"
+            },
+            {
+                title:"<div class='item-song'>I saw you dancing</div><div class='item-artist'>Yaki Da</div><img src='images/temp/music-player5.jpg' alt='' />",
+                mp3:"http://www.jplayer.org/audio/mp3/TSP-07-Cybersonnet.mp3",
+                oga:"http://www.jplayer.org/audio/ogg/TSP-07-Cybersonnet.ogg"
+            },
+            {
+                title:"<div class='item-song'>Sands of Time</div><div class='item-artist'>Pandora</div><img src='images/temp/music-player6.jpg' alt='' />",
+                mp3:"http://www.jplayer.org/audio/mp3/Miaow-07-Bubble.mp3",
+                oga:"http://www.jplayer.org/audio/ogg/Miaow-07-Bubble.ogg"
+            }
+        ], {
+            swfPath: "js",
+            supplied: "oga, mp3",
+            wmode: "window",
+            smoothPlayBar: false,
+            keyEnabled: false
+        });
+    });
+    //]]>
+</script>
+
+<!-- Scroll Bars -->
+<script src="js/jquery.mousewheel.js"></script>
+<script src="js/jquery.jscrollpane.min.js"></script>
+<script type="text/javascript">
+	jQuery(function()
+	{
+		jQuery('.scrollbar').jScrollPane({
+			verticalDragMaxHeight: 9,
+			verticalDragMinHeight:9
+		});
+
+		jQuery('.scrollbar.scrollbar-yellow').jScrollPane({
+			verticalDragMaxHeight: 20,
+			verticalDragMinHeight:20
+		});
+
+		jQuery('.scrollbar.scrollbar-red').jScrollPane({
+			verticalDragMaxHeight: 5,
+			verticalDragMinHeight:5
+		});
+
+		jQuery('.scrollbar.scrollbar-blue').jScrollPane({
+			verticalDragMaxHeight: 50,
+			verticalDragMinHeight:50
+		});
+	});
+</script>
+
+<!--[if lt IE 9]><script src="js/respond.min.js"></script><![endif]-->
+<!--[if gte IE 9]>
+<style type="text/css">
+    .gradient {filter: none !important;}
+</style>
+<![endif]-->
+</head>
+
+<body>
+
+<div class="container container-wide">
+
+<!-- content -->
+<div class="content " role="main">
+<!-- row -->
+<div class="row">
+<div class="col-sm-12">
+
+
+<!-- Website Menu -->
+<div id="topmenu">
+    <ul class="dropdown clearfix boxed">
+        <li class="menu-level-0"><a href="about.html"><span>About</span></a></li>
+        <li class="menu-level-0"><a href="settings.html"><i class="icon-menu icon-menu4"></i><span>Settings</span></a> </li>
+        <li class="menu-level-0"><a href="Temperature_data.html"><span>Temperature data</span></a> </li>
+        <li class="menu-level-0"><a href="demo.html"><span>Demo</span></a> </li>
+        <li class="menu-level-0"><a href="help.html"><span>Help</span></a>
+            
+        </li>
+    </ul>
+</div>
+<!--/ Website Menu -->
+
+
+<div class="col-sm-12">
+<!-- Simple Message Field -->
+<div class="comment-list styled clearfix">
+    <ol>
+        <li class="comment">
+            <div class="comment-body boxed">
+                <div class="comment-text">
+                    <div class="comment-author clearfix">
+                        <a href="#" class="link-author">Instruction</a>
+                    </div>
+                    <div class="comment-entry">
+                        Some instructions might be helpful.
+                    </div>
+                </div>
+                <div class="clear"></div>
+            </div>
+        </li>
+    </ol>
+</div>
+<!--/ Simple Message Field -->
+
+
+
+
+</div>
+
+<!-- row level 2 -->
+<div class="row">
+   
+    <div class="col-sm-4">
+    
+
+        <!-- Controls -->
+        <div class="controls boxed line-top">
+            <div class="inner clearfix">
+                <div class="input_styled checklist pull-left"><div class="rowCheckbox"><input name="signup" type="checkbox" id="signup" value="signup"><label for="signup"></label></div></div>
+                <div class="input_styled checklist pull-left"><div class="rowCheckbox checkbox-red"><input name="signup2" checked type="checkbox" id="signup2" value="signup2"><label for="signup2"></label></div></div>
+                <div class="input_styled checklist pull-left"><div class="rowCheckbox checkbox-large checkbox-noText"><input name="signup5" type="checkbox" checked id="signup5" value="signup5"><label for="signup5">ON</label></div></div>
+                <div class="clear"></div>
+                <div class="input_styled inlinelist pull-left"><div class="rowRadio"><input type="radio" name="signup3" value="radio_v1" id="radio_v1"><label for="radio_v1"></label></div></div>
+                <div class="input_styled inlinelist pull-left"><div class="rowRadio radio-red"><input type="radio" name="signup3" value="radio_v2" id="radio_v2" checked><label for="radio_v2"></label></div></div>
+                <div class="input_styled checklist pull-left"><div class="rowCheckbox checkbox-large checkbox-noText"><input name="signup6" type="checkbox" id="signup6" value="signup6"><label for="signup6">OFF</label></div></div>
+            </div>
+        </div>
+        <!--/ Controls -->
+    </div>
+    
+    
+    
+    
+    <div class="col-sm-4">
+    <div class="widget-container progressBars boxed">
+        <h3 class="widget-title">Progress Bars</h3>
+        <div class="inner">
+            <!-- Progress Bar -->
+            <div id="progressBar1" class="progressbar">
+                <span class="mark-left">0%</span>
+                <span class="mark-right">100%</span>
+                <div class="percent"></div>
+                <div class="pbar"></div>
+                <div class="elapsed"></div>
+                <div class="remained"></div>
+            </div>
+            <script type="text/javascript">
+                $(document).ready(function() {
+                    $('#progressBar1').anim_progressbar({
+                        totaltime: 90
+                    });
+                });
+            </script>
+            <!--/ Progress Bar -->
+
+            <!-- Range slider -->
+            <div class="range-slider styled">
+                <input id="price_range" type="text" name="price_range" value="120;720">
+            </div>
+            <script type="text/javascript" >
+                jQuery(document).ready(function($) {
+                    // Price Range Input
+                    $("#price_range").rangeslider({
+                        from: 0,
+                        to: 1000,
+                        limits: false,
+                        scale: ['$0', '$1000'],
+                        heterogeneity: ['50/300'],
+                        step: 10,
+                        smooth: true,
+                        dimension: '$'
+                    });
+                });
+            </script>
+            <!-- Range slider -->
+
+            <!-- Progress Bar with download Bar -->
+            <div id="progressBar2" class="progressbar style2">
+                <span class="mark-left">0%</span>
+                <span class="mark-right">100%</span>
+                <div class="percent"></div>
+                <div class="pbar">
+                    <div id="downloadBar" class="downloadbar">
+                        <div class="pbar"></div>
+                    </div>
+                </div>
+                <div class="elapsed"></div>
+                <div class="remained"></div>
+
+            </div>
+            <script type="text/javascript">
+                $(document).ready(function() {
+                    $('#progressBar2').anim_progressbar({
+                        totaltime: 180
+                    });
+                    $('#downloadBar').anim_progressbar({
+                        totaltime: 120
+                    });
+                });
+            </script>
+            <!--/ Progress Bar with download Bar -->
+        </div>
+    </div>
+</div>
+ <div class="col-sm-4">
+<div class="widget-container scrollBars boxed">
+        <h3 class="widget-title">Scroll Bars</h3>
+        <div class="inner clearfix">
+            <!-- ScrollBars -->
+            <div class="scrollbar">
+                <div class="scrollbar-inner">
+                    <p>These examples show very basic functionality and exist so that I can test that any changes to jScrollPane work cross browser and don't cause any new problems. Note that these examples aren't meant to look pretty, they merely highlight different bits of functionaity which are available. If you want examples of jScrollPane looking good then check out the themes.</p>
+                </div>
+            </div>
+            <div class="scrollbar scrollbar-yellow">
+                <div class="scrollbar-inner">
+                    <p>These examples show very basic functionality and exist so that I can test that any changes to jScrollPane work cross browser and don't cause any new problems. Note that these examples aren't meant to look pretty, they merely highlight different bits of functionaity which are available. If you want examples of jScrollPane looking good then check out the themes.</p>
+                </div>
+            </div>
+            <div class="scrollbar scrollbar-red">
+                <div class="scrollbar-inner">
+                    <p>These examples show very basic functionality and exist so that I can test that any changes to jScrollPane work cross browser and don't cause any new problems. Note that these examples aren't meant to look pretty, they merely highlight different bits of functionaity which are available. If you want examples of jScrollPane looking good then check out the themes.</p>
+                </div>
+            </div>
+            <div class="scrollbar scrollbar-blue">
+                <div class="scrollbar-inner">
+                    <p>These examples show very basic functionality and exist so that I can test that any changes to jScrollPane work cross browser and don't cause any new problems. Note that these examples aren't meant to look pretty, they merely highlight different bits of functionaity which are available. If you want examples of jScrollPane looking good then check out the themes.</p>
+                </div>
+            </div>
+            <!--/ ScrollBars -->
+        </div>
+    </div>
+    </div>
+<!--/ row level 2 -->
+</div>
+
+
+
+
+</div>
+<!--/ content -->
+
+</div>
+<!--/ container -->
+
+</body>
+</html>
