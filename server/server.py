@@ -7,13 +7,13 @@ from paste import httpserver #Server imports
 import ntplib, datetime #for utc timestamp
 from xml.dom import minidom
 import urllib
-import numpy as np
 import redis
 from jinja2 import Environment, PackageLoader
 
 import re # Parse String (url path)
 import string # Parse String (url path)
 
+sudo apt-get install python-urllib3 
 
 #### GET WEATHER
 def getWeatherUndergroundForecastArray(latitude_deg=50.8970,longitude_deg=-1.4042):
@@ -43,7 +43,7 @@ def getWeatherUndergroundForecastArray(latitude_deg=50.8970,longitude_deg=-1.404
 
 	hourly_forecast=dom.getElementsByTagName('hourly_forecast')[0]
 
-	Wundergroundforecastarray = np.zeros((25,1))
+	Wundergroundforecastarray = [0]*25
 	for i in range(0, 25):
 		forecast=hourly_forecast.getElementsByTagName('forecast')[i]
 		FCTTIME=forecast.getElementsByTagName('FCTTIME')[0]
@@ -56,7 +56,7 @@ def getWeatherUndergroundForecastArray(latitude_deg=50.8970,longitude_deg=-1.404
 
 
 	#Linear Interpolation
-	TemperatureArray=np.zeros((144,1))
+	TemperatureArray=[0] * 144
 	for i in range(0, 24):
 		for j in range(0, 6):
 			TemperatureArray[i*6+j][0]=(Wundergroundforecastarray[i][0]*(6-j)+Wundergroundforecastarray[i+1][0]*(j))/6
