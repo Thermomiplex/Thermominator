@@ -9,7 +9,9 @@ from xml.dom import minidom
 import urllib
 import redis
 from jinja2 import Environment, PackageLoader
-
+import time
+import datetime
+import pprint
 import re # Parse String (url path)
 import string # Parse String (url path)
 
@@ -67,6 +69,23 @@ def pi_names():
 	pis = list(set(r.keys("*:set_point")) | set(r.keys("*:ambient_set_point")))
 	return [pi.split(":")[0] for pi in pis]
 
+def log_temp(temp, pi, name):
+	n = datetime.datetime.now()
+	unix_time = time.mktime(n.timetuple())
+	key = ":".join([pi, name])
+	key_recent = key + "_latest"
+	return r.hset(key, unix_time, temp) & r.set(key_recent, temp)
+
+def get_temp_log(pi, name):
+	key = ":".join([pi, name])
+	return r.hgetall(key)
+
+def get_temp_recent(pi, name):
+	key_recent = ":".join([pi, name]) + "_latest"
+	return r.get(key_recent)
+
+
+
 #### SERVER
 pydict = {} #Thermostat Request
 pydictA = {} #Ambient Temperature
@@ -79,7 +98,6 @@ def app(environ, start_response):
 	if path == "/":
 
 		start_response('200 OK', [('content-type', 'text/html')])
-		
 		message = "Welcome etc"
 		template = env.get_template('index.html')
 		pis = pi_names()
@@ -91,9 +109,8 @@ def app(environ, start_response):
 		temp = float(PathList[3])
 		start_response('200 OK', [('content-type', 'text/xml')])
 		pydict[pinum] = temp
-		r.rpush(pinum + ":set_point", temp)
+		log_temp(temp, pinum, "setpoint")
 		return ['<pi>'+'<pinumber>'+str(pinum)+'</pinumber><temp>'+ str(temp)+'</temp></pi>']
-
 
 	elif PathList[1] == "set_ambient_temperature":
 
@@ -101,19 +118,29 @@ def app(environ, start_response):
 		temp = float(PathList[3])
 		start_response('200 OK', [('content-type', 'text/xml')])
 		pydictA[pinum] = temp
-		r.rpush(pinum + "ambient_set_point", temp)
+		log_temp(temp, pinum, "ambient_set_point")
 
 		return ['<pi>'+'<pinumber>'+str(pinum)+'</pinumber><AmbientTemp>'+ str(temp)+'</AmbientTemp></pi>']
 
-	# elif PathList[1] == "get_setpoint_history":
-	# 	pinum = PathList[2]
-	# 	llen = r.llen(pinum + ":set_point")
+	elif PathList[1] == "get_setpoint_history":
+		pinum = PathList[2]
+		start_response('200 OK', [('content-type', 'text/json')])
+		return pprint.pformat(get_temp_log(pinum, "setpoint"))
+
+	elif PathList[1] == "get_ambient_history":
+		pinum = PathList[2]
+		start_response('200 OK', [('content-type', 'text/json')])
+		return pprint.pformat(get_temp_log(pinum, "ambient_set_point"))
+
+	elif PathList[1] == "get_temperature_history":
+		pinum = PathList[2]
+		start_response('200 OK', [('content-type', 'text/json')])
+		return pprint.pformat(get_temp_log(pinum, "temperature_history"))
 
 
 	elif PathList[1] == "get":
 
 		start_response('200 OK', [('content-type', 'text/xml')])
-
 		pinum = PathList[2]
 		if pinum in pydict:
 			return [str(pydict[pinum])] #['<pi>'+'<pinumber>'+str(pinum)+'</pinumber><temp>'+ str(pydict[pinum])+'</temp></pi>']
@@ -123,7 +150,6 @@ def app(environ, start_response):
 	elif PathList[1] == "get_plan":
 
 		start_response('200 OK', [('content-type', 'text/xml')])
-
 		pinum = PathList[2]
 		if pinum in pydict:
 			print getWeatherUndergroundForecastArray()
@@ -140,5 +166,5 @@ def app(environ, start_response):
 if __name__ == '__main__':
 	r = redis.StrictRedis()
 	env = Environment(loader=PackageLoader('templates', 'files'))
-	httpserver.serve(app, host='0.0.0.0', port='11885')
+	httpserver.serve(app, host='0.0.0.0', port='11884')
 
