@@ -17,6 +17,7 @@ import datetime
 import pprint
 import re # Parse String (url path)
 import string # Parse String (url path)
+from collections import OrderedDict
 
 
 #### GET WEATHER
@@ -81,13 +82,7 @@ def log_temp(temp, pi, name):
 
 def get_temp_log(pi, name):
 	key = ":".join([pi, name])
-	time_temp = r.hgetall(key)
-	sorted_keys = sorted([float(key) for key in time_temp.keys()])
-	float_keys = {float(key): time_temp[key] for key in time_temp.keys()}
-	sorted_dict = OrderedDict()
-	for key in sorted_keys:
-		sorted_dict[key] = float_keys[str(key)]
-	return sorted_dict
+	return r.hgetall(key)
 
 def get_temp_recent(pi, name):
 	key_recent = ":".join([pi, name]) + "_latest"
@@ -116,9 +111,10 @@ def app(environ, start_response):
 		pinum = PathList[2]
 		start_response('200 OK', [('content-type', 'text/html')])
 		template = env.get_template('test.html')
-		history = get_temp_log(pinum, "setpoint")
+		history = get_temp_log(pinum, "temperature_history")
+		setpoints = get_temp_log(pinum, "setpoint")
 		currTemp = get_temp_recent(pinum, "temperature_history")
-		return template.render(history=history, current_temp=currTemp)
+		return template.render(history=history, setpoints=setpoints, current_temp=currTemp)
 
 	elif PathList[1] == "set":
 
@@ -156,6 +152,7 @@ def app(environ, start_response):
 
 
 	elif PathList[1] == "get":
+
 		start_response('200 OK', [('content-type', 'text/xml')])
 		pinum = PathList[2]
 		if pinum in pydict:
@@ -164,6 +161,7 @@ def app(environ, start_response):
 			return ['<pi>'+'<pinumber>'+str(pinum)+'</pinumber><temp>NO TEMP</temp></pi>']
 
 	elif PathList[1] == "get_plan":
+
 		start_response('200 OK', [('content-type', 'text/xml')])
 		pinum = PathList[2]
 		if pinum in pydict:
@@ -179,7 +177,6 @@ def app(environ, start_response):
 
 static_app = StaticURLParser("static/")
 full_app = Cascade([static_app, app])
-
 if __name__ == '__main__':
 	r = redis.StrictRedis()
 	env = Environment(loader=PackageLoader('templates', 'files'))

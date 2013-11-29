@@ -9,17 +9,19 @@
 	<script type="text/javascript">
 
 	$(function() {
-		var d1 = [
+		var temphist = [
 		{% for timestamp in history: %}
 			[{{timestamp}},{{history[timestamp]}}],
 		{% endfor %}
 		];
 
-		$.plot("#placeholder", [ d1]);
+		var sethist = [
+		{% for timestamp in setpoints: %}
+			[{{timestamp}},{{setpoints[timestamp]}}],
+		{% endfor %}
+		];
 
-		// Add the Flot version string to the footer
-
-		$("#footer").prepend("Flot " + $.plot.version + " &ndash; ");
+		$.plot("#placeholder", [ temphist, sethist]);
 	});
 
 	</script>
@@ -36,11 +38,9 @@
 		</div>
 
 		<p>current temp: {{current_temp}}</p>
+		<p>set temp: <input id="settemp" type="text">
+		<input id="submit" type="submit" value="Submit"></p>
 
-	</div>
-
-	<div id="footer">
-		Copyright &copy; 2013 ORCHID
 	</div>
 </body>
 </html>

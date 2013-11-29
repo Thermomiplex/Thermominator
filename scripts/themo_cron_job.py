@@ -1,5 +1,7 @@
 import redis
 import urllib2 as url
+import datetime
+import time
 # from control import get_temperature
 
 ip = "152.78.101.204:8083"
@@ -15,7 +17,8 @@ def log_temp(temp, pi, name):
 	return r.hset(key, unix_time, temp) & r.set(key_recent, temp)
 
 def get_temperature(ip, deviceNumber):
-    print "http://"+ip+"ZWaveAPI/Run/devices["+str(deviceNumber)+"].instances[0].SensorMultilevel.data[1].val.value"
+    myurl = "http://"+ip+"/ZWaveAPI/Run/devices["+str(deviceNumber)+"].instances[0].SensorMultilevel.data[1].val.value"
+    print myurl
     return url.urlopen("http://"+ip+"/ZWaveAPI/Run/devices["+str(deviceNumber)+"].instances[0].SensorMultilevel.data[1].val.value").read()
 
 r = redis.StrictRedis()
