@@ -9,25 +9,26 @@
 	<script type="text/javascript">
 
 	$(function() {
-		var d1 = [
+		var temphist = [
 		{% for timestamp in history: %}
 			[{{timestamp}},{{history[timestamp]}}],
 		{% endfor %}
 		];
 
-		$.plot("#placeholder", [ d1]);
+		var sethist = [
+		{% for timestamp in setpoints: %}
+			[{{timestamp}},{{setpoints[timestamp]}}],
+		{% endfor %}
+		];
 
-		// Add the Flot version string to the footer
-
-		$("#footer").prepend("Flot " + $.plot.version + " &ndash; ");
+		$.plot("#placeholder", [ temphist, sethist]);
 	});
 
 	</script>
 </head>
 <body>
 	<div id="header">
-		<h2>POOOOO</h2>
-		{{history}}
+		<h2>history</h2>
 	</div>
 
 	<div id="content">
@@ -36,14 +37,10 @@
 			<div id="placeholder" style="width:800px; height:500px"></div>
 		</div>
 
-		<p>You don't have to do much to get an attractive plot.  Create a placeholder, make sure it has dimensions (so Flot knows at what size to draw the plot), then call the plot function with your data.</p>
+		<p>current temp: {{current_temp}}</p>
+		<p>set temp: <input id="settemp" type="text">
+		<input id="submit" type="submit" value="Submit"></p>
 
-		<p>The axes are automatically scaled.</p>
-
-	</div>
-
-	<div id="footer">
-		Copyright &copy; 2013 ORCHID
 	</div>
 </body>
 </html>

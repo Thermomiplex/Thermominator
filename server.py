@@ -17,6 +17,7 @@ import datetime
 import pprint
 import re # Parse String (url path)
 import string # Parse String (url path)
+from collections import OrderedDict
 
 
 #### GET WEATHER
@@ -69,7 +70,7 @@ def getWeatherUndergroundForecastArray(latitude_deg=50.8970,longitude_deg=-1.404
 
 
 def pi_names():
-	pis = list(set(r.keys("*:set_point")) | set(r.keys("*:ambient_set_point")))
+	pis = list(set(r.keys("*:setpoint")) | set(r.keys("*:ambient_set_point")))
 	return [pi.split(":")[0] for pi in pis]
 
 def log_temp(temp, pi, name):
@@ -114,8 +115,10 @@ def app(environ, start_response):
 		pinum = PathList[2]
 		start_response('200 OK', [('content-type', 'text/html')])
 		template = env.get_template('test.html')
-		history = get_temp_log(pinum, "setpoint")
-		return template.render(history=history)
+		history = get_temp_log(pinum, "temperature_history")
+		setpoints = get_temp_log(pinum, "setpoint")
+		currTemp = get_temp_recent(pinum, "temperature_history")
+		return template.render(history=history, setpoints=setpoints, current_temp=currTemp)
 
 	elif PathList[1] == "set":
 
@@ -153,6 +156,7 @@ def app(environ, start_response):
 
 
 	elif PathList[1] == "get":
+
 		start_response('200 OK', [('content-type', 'text/xml')])
 		pinum = PathList[2]
 		if pinum in pydict:
@@ -161,6 +165,7 @@ def app(environ, start_response):
 			return ['<pi>'+'<pinumber>'+str(pinum)+'</pinumber><temp>NO TEMP</temp></pi>']
 
 	elif PathList[1] == "get_plan":
+
 		start_response('200 OK', [('content-type', 'text/xml')])
 		pinum = PathList[2]
 		if pinum in pydict:
@@ -176,7 +181,6 @@ def app(environ, start_response):
 
 static_app = StaticURLParser("static/")
 full_app = Cascade([static_app, app])
-
 if __name__ == '__main__':
 	r = redis.StrictRedis()
 	env = Environment(loader=PackageLoader('templates', 'files'))
