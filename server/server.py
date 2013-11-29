@@ -65,7 +65,7 @@ def getWeatherUndergroundForecastArray(latitude_deg=50.8970,longitude_deg=-1.404
 
 def pi_names():
 	pis = list(set(r.keys("*:set_point")) | set(r.keys("*:ambient_set_point")))
-	return [pi.split[":"][0] for pi in pis]
+	return [pi.split(":")[0] for pi in pis]
 
 #### SERVER
 pydict = {} #Thermostat Request
