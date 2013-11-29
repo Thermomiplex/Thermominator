@@ -18,6 +18,9 @@ import pprint
 import re # Parse String (url path)
 import string # Parse String (url path)
 from collections import OrderedDict
+zwave_ip = "152.78.101.204:8083"
+def set_setpoint(ip, deviceNumber, setpoint):
+    url.urlopen("http://"+ip+"/ZWaveAPI/Run/devices["+str(deviceNumber)+"].instances[0].ThermostatSetPoint.Set(1,"+str(setpoint)+")").read()
 
 
 #### GET WEATHER
@@ -82,13 +85,17 @@ def log_temp(temp, pi, name):
 
 def get_temp_log(pi, name):
 	key = ":".join([pi, name])
-	return r.hgetall(key)
+	time_temp = r.hgetall(key)
+	sorted_keys = sorted([float(key) for key in time_temp.keys()])
+	float_keys = {float(key): time_temp[key] for key in time_temp.keys()}
+	sorted_dict = OrderedDict()
+	for key in sorted_keys:
+		sorted_dict[key] = float_keys[key]
+	return sorted_dict
 
 def get_temp_recent(pi, name):
 	key_recent = ":".join([pi, name]) + "_latest"
 	return r.get(key_recent)
-
-
 
 #### SERVER
 pydict = {} #Thermostat Request
@@ -123,6 +130,7 @@ def app(environ, start_response):
 		start_response('200 OK', [('content-type', 'text/xml')])
 		pydict[pinum] = temp
 		log_temp(temp, pinum, "setpoint")
+		set_setpoint(zwave_ip, pinum, str(temp))
 		return ['<pi>'+'<pinumber>'+str(pinum)+'</pinumber><temp>'+ str(temp)+'</temp></pi>']
 
 	elif PathList[1] == "set_ambient_temperature":
