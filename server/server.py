@@ -8,6 +8,8 @@ import ntplib, datetime #for utc timestamp
 from xml.dom import minidom
 import urllib
 import numpy as np
+import redis
+from jinja2 import Environment, PackageLoader
 
 import re # Parse String (url path)
 import string # Parse String (url path)
@@ -70,15 +72,16 @@ def app(environ, start_response):
 	fields = parse_formvars(environ)
 
 	path = environ['PATH_INFO']
-	Separators = re.compile('/')
-	PathList = Separators.split(path)
-	#print len(PathList)
-
+	PathList = path.split("/")
 
 	if path == "/":
 
 		start_response('200 OK', [('content-type', 'text/html')])
-		return ['<center> Welcome to Hot-Pi. </br> Call set/pi#/<number>/ to set a temp </br> Call get/pi# to get the temp</br> Call get_plan/pi# to get the policy</center>']
+		pis = list(set(r.keys("*:set_point")) | set(r.keys("*:ambient_set_point")))
+		message = "Welcome etc"
+		template = env.get_template('index.html')
+
+		return template.render(pis=pis, message=message)
 
 	elif PathList[1] == "set":
 
@@ -86,7 +89,7 @@ def app(environ, start_response):
 		temp = float(PathList[3])
 		start_response('200 OK', [('content-type', 'text/xml')])
 		pydict[pinum] = temp
-
+		r.rpush(pinum + ":set_point", temp)
 		return ['<pi>'+'<pinumber>'+str(pinum)+'</pinumber><temp>'+ str(temp)+'</temp></pi>']
 
 
@@ -96,8 +99,13 @@ def app(environ, start_response):
 		temp = float(PathList[3])
 		start_response('200 OK', [('content-type', 'text/xml')])
 		pydictA[pinum] = temp
+		r.rpush(pinum + "ambient_set_point", temp)
 
 		return ['<pi>'+'<pinumber>'+str(pinum)+'</pinumber><AmbientTemp>'+ str(temp)+'</AmbientTemp></pi>']
+
+	# elif PathList[1] == "get_setpoint_history":
+	# 	pinum = PathList[2]
+	# 	llen = r.llen(pinum + ":set_point")
 
 
 	elif PathList[1] == "get":
@@ -128,5 +136,7 @@ def app(environ, start_response):
 
 
 if __name__ == '__main__':
-	httpserver.serve(app, host='152.78.200.94', port='11884')
+	r = redis.StrictRedis()
+	env = Environment(loader=PackageLoader('templates', 'files'))
+	httpserver.serve(app, host='0.0.0.0', port='11884')
 
