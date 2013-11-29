@@ -110,7 +110,7 @@ def app(environ, start_response):
 		pinum = PathList[2]
 		start_response('200 OK', [('content-type', 'text/html')])
 		template = env.get_template('test.html')
-		history = get_temp_log(pinum, "temperature_history")
+		history = get_temp_log(pinum, "setpoint")
 		return template.render(history=history)
 
 	elif PathList[1] == "set":
