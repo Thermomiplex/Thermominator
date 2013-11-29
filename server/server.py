@@ -13,7 +13,6 @@ from jinja2 import Environment, PackageLoader
 import re # Parse String (url path)
 import string # Parse String (url path)
 
-sudo apt-get install python-urllib3 
 
 #### GET WEATHER
 def getWeatherUndergroundForecastArray(latitude_deg=50.8970,longitude_deg=-1.4042):
