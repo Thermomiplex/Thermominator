@@ -3,6 +3,9 @@
 ######################################################################
 
 from paste.request import parse_formvars #Server imports
+from paste.urlparser import StaticURLParser
+from paste.cascade import Cascade
+from paste.fileapp import DirectoryApp
 from paste import httpserver #Server imports
 import ntplib, datetime #for utc timestamp
 from xml.dom import minidom
@@ -157,14 +160,16 @@ def app(environ, start_response):
 		else:
 			return ['<pi>'+'<pinumber>'+str(pinum)+'</pinumber><temp>NO Policy</temp></pi>']
 
-	else:
-		start_response('200 OK', [('content-type', 'text/xml')])
-		return ['<error> Not a valid request. For information about our API service please check our web site at http://www.intelligence.tuc.gr/renes. </error>']
+	# else:
+	# 	start_response('200 OK', [('content-type', 'text/xml')])
+	# 	return ['<error> Not a valid request. For information about our API service please check our web site at http://www.intelligence.tuc.gr/renes. </error>']
 
 
-
+static_app = StaticURLParser("static/")
+full_app = Cascade([static_app, app])
 if __name__ == '__main__':
 	r = redis.StrictRedis()
 	env = Environment(loader=PackageLoader('templates', 'files'))
-	httpserver.serve(app, host='0.0.0.0', port='11884')
+
+	httpserver.serve(full_app, host='0.0.0.0', port='11884')
 
